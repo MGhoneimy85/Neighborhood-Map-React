@@ -1,7 +1,7 @@
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
+import axios from 'axios';
 const mapStyles = {
   width: '100%',
   height: '100%'
@@ -21,21 +21,54 @@ class MapWrapper extends Component {
     this.onMarkerClick = this.onMarkerClick.bind(this);
     this.onMarkerClick = this.onMarkerClick.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.param = {
+      client_id: "1CPFL1RI135SHQNHOTCT2HYAAXV3LK0SHR1RCIBVWOHMLZOF",
+      client_secret: "U5G4FEDYVEAHXJH3BSYYGNGPYTK1JKSNQVU3RPWRGHSYN3PV",
+      VENUE_ID: '',
+      v:'20190126'
+    }
+
+    this.apiURL = "https://api.foursquare.com/v2/venues/";
     
   }
   
+  getVenueDetails = (id) => {
+    axios.get(this.apiURL +this.param.VENUE_ID+'?'+ new URLSearchParams(this.param))
+    .then(response => {
+      this.setState({
+        selectedPlace: response.data.response.venue,
+        showingInfoWindow: true
+      });
+      console.log(response);
+      console.log(this.state.selectedPlace);
+    })
+    .catch(error => {
+      console.log("ERROR!! " + error)
+    })
+  }
 
   componentDidMount() {
     console.log(this.props);
     console.log(this.state);
   }
 
-  onMarkerClick = (props, marker, e) =>
+  onMarkerClick = (props, marker, e) =>{
+    console.log(marker);
+    let selectedItem = {};
+    this.state.markers.forEach((item) => {
+      if(item.venue.name.toLowerCase().includes(marker.title.toLowerCase())){
+        selectedItem = item;
+        this.param.VENUE_ID = item.venue.id;
+      }
+    });
+
+    this.getVenueDetails(selectedItem.venue.id);
+
     this.setState({
-      selectedPlace: props,
       activeMarker: marker,
-      showingInfoWindow: true
   })
+  }
+    
 
   onClose = props => {
     if (this.state.showingInfoWindow) {
@@ -51,7 +84,7 @@ class MapWrapper extends Component {
     return (
         <Map
         google={this.props.google}
-        zoom={14}
+        zoom={13}
         style={mapStyles}
         initialCenter={{
           lat: this.props.position.lat,
@@ -66,6 +99,8 @@ class MapWrapper extends Component {
                 title={item.venue.name}
                 onClick={this.onMarkerClick}
                 name={item.venu}
+                animation={this.state.selectedPlace.name === item.venue.name ? this.props.google.maps.Animation.BOUNCE : null  }
+                icon= {{url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"}}
               />
        ))}
       
@@ -73,9 +108,11 @@ class MapWrapper extends Component {
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}
           onClose={this.onClose}
+
         >
-          <div>
-            <h4>{this.state.selectedPlace.name}</h4>
+          <div aria-label="title contianer">
+            <h4>Title: {this.state.selectedPlace.name}</h4>
+            <h4 style={{ color: '#'+ this.state.selectedPlace.ratingColor}}>Rating: {this.state.selectedPlace.rating}</h4>
           </div>
         </InfoWindow>
       </Map>      

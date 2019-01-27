@@ -180,5 +180,13 @@ main.open{
     transform: rotate(360deg);
   }
 }
+
+.foursquarelogo{
+  position: absolute;
+  bottom: 50%;
+  right: 0;
+  width: 40px;
+  height: 40px;
+}
   
 

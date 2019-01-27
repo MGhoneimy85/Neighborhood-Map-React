@@ -10,6 +10,7 @@ class Master extends Component {
     this.state = { menuOpen: false , 
                    venues: [] , 
                    filteredVenues: [] ,
+                   isLoading: false,
                    noResults: false,
                    currentLatLng: {
                       lat: 0,
@@ -34,13 +35,15 @@ class Master extends Component {
     this.getGeoLocation();
   }
 
+  /*  get all food catgory places near your current location  */
   getVenues = () => {
     console.log(this.param) ; 
     axios.get(this.apiURL + new URLSearchParams(this.param))
       .then(response => {
         this.setState({
           venues: response.data.response.groups[0].items,
-          filteredVenues: response.data.response.groups[0].items 
+          filteredVenues: response.data.response.groups[0].items,
+          isLoading: true
         }, null);
       })
       .catch(error => {
@@ -54,7 +57,7 @@ class Master extends Component {
     }));
     console.log(this.state)
   }
-
+  /*  get your current location landitude and langtidue to send them to map Wrapper amd to foursquare */
   getGeoLocation = () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -117,7 +120,7 @@ class Master extends Component {
           </header>
           <section>
             {
-              this.state.filteredVenues.length > 0 ? 
+              this.state.isLoading ? 
               <MapWrapper markers={this.state.filteredVenues} position={this.state.currentLatLng} /> 
               : 
               <div className="loading-div">
@@ -127,7 +130,9 @@ class Master extends Component {
                   <img src={logo} className="App-logo" alt="logo" />
               </div>
             }
-              
+              <img src="http://icons.iconarchive.com/icons/designbolts/vector-foursquare/128/Foursquare-1-icon.png"
+					className="foursquarelogo"
+				 	alt="foursquarelogo"/>
           </section>
         </main>
       </div>
