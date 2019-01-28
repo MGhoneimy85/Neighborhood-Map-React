@@ -25,6 +25,9 @@ header{
   text-align: center;
 
 }
+header h3{
+  margin:0;
+}
 section{
   height: calc(100vh - 64px);
   position: relative;
@@ -93,6 +96,8 @@ main.open{
   -o-transition: .5s ease-in-out;
   transition: .5s ease-in-out;
   cursor: pointer;
+  background: transparent;
+  border: 0;
 }
 #nav-icon4 span {
   display: block;

@@ -40,7 +40,6 @@ class Master extends Component {
 
   /*  get all food catgory places near your current location  */
   getVenues = () => {
-    console.log(this.param) ; 
     axios.get(this.apiURL + new URLSearchParams(this.param))
       .then(response => {
         this.setState({
@@ -66,6 +65,10 @@ class Master extends Component {
   setSelected(param){
     this.setState(state => ({
       menuOpen: !state.menuOpen,
+      currentLatLng:{
+        lat:param.location.lat,
+        lng:param.location.lng
+      },
       selectedPlace:param
     }));
   }
@@ -121,7 +124,7 @@ class Master extends Component {
     return (
       <div className="container">
         <div className={this.state.menuOpen? 'side-menu open' : 'side-menu'} >
-          <input type="text" onChange={this.filterVenues} placeholder="filter" />
+          <input type="text" onChange={this.filterVenues} placeholder="Filter Restaurants" />
           {this.state.noResults ? <div className="no-results"> No results found </div> : null}
           <div className="side-menu-items">
               {this.state.filteredVenues.map((item,index) => (<div key={index} className="side-menu-item" onClick={() => this.setSelected(item.venue)} >{item.venue.name}</div>))}
@@ -129,10 +132,11 @@ class Master extends Component {
         </div>
         <main className={this.state.menuOpen? 'open' : ''}>
           <header> 
-              <div id="nav-icon4" onClick={this.toggleMenu}  className={this.state.menuOpen? 'open' : ''}  >
+              <button id="nav-icon4" tabIndex="1" onClick={this.toggleMenu}  className={this.state.menuOpen? 'open' : ''}  >
                 <span></span><span></span><span></span>
-              </div>
-              Neighborhood Map React
+              </button>
+              <h3>Neighborhood Map React</h3>
+              
           </header>
           <section>
             {

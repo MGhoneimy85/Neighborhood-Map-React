@@ -46,20 +46,14 @@ class MapWrapper extends Component {
     })
   }
 
-
   onMarkerClick = (props, marker , e) =>{
-    let selectedItem = {};
-    this.state.markers.forEach((item) => {
-      if(item.venue.name.toLowerCase().includes(marker.title.toLowerCase())){
-        selectedItem = item;
-      }
-    });
+    console.log(marker);
+    
     //get selected marker venue details rating to display it in info window
-    this.getVenueDetails(selectedItem.venue.id);
+    this.getVenueDetails(marker.id);
     // set selected marker selected venue show info window
     this.setState({
       activeMarker: marker,
-      selectedPlace:selectedItem.venue,
       showingInfoWindow: true
     })
   }
@@ -74,6 +68,7 @@ class MapWrapper extends Component {
     }
   }
 
+  
 
   render() {
     return (
@@ -81,7 +76,10 @@ class MapWrapper extends Component {
         google={this.props.google}
         zoom={13}
         style={this.mapStyles}
-        centerAroundCurrentLocation={true}
+        center={{
+          lat: this.props.position.lat,
+          lng: this.props.position.lng
+        }}
         onClick={this.onClose}
         initialCenter={{
           lat: this.props.position.lat,
@@ -93,6 +91,7 @@ class MapWrapper extends Component {
                 id={item.venue.id}
                 position={{lat: item.venue.location.lat, lng:item.venue.location.lng}}
                 key={index}
+                tabindex={index+2}
                 title={item.venue.name}
                 onClick={this.onMarkerClick}
                 name={item.venue.name}
@@ -107,7 +106,7 @@ class MapWrapper extends Component {
           onClose={this.onClose}
         >
           <div aria-label="title contianer">
-            <h4>Title: {this.state.selectedPlace.name}</h4>
+            <h4>Title: {this.state.activeMarker.name}</h4>
             <h4 style={{ color: '#'+ this.state.selectedPlace.ratingColor}}>Rating: {this.state.selectedPlace.rating}</h4>
           </div>
         </InfoWindow>
