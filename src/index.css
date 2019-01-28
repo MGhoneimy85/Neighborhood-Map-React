@@ -6,6 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
 }
 
 code {
@@ -56,6 +57,7 @@ main.open{
     line-height: 30px;
     font-size: 24px;
     margin-bottom: 20px;
+    width:100%;
 }
 .side-menu .no-results{
   margin: 10px;
@@ -73,6 +75,7 @@ main.open{
   font-size: 20px;
   border-bottom: 1px #fff solid;
   padding: 10px 0;
+  cursor: pointer;
 }
 
 #nav-icon4 {
@@ -189,4 +192,12 @@ main.open{
   height: 40px;
 }
   
+
+@media (max-width:500px){
+
+  header{
+    font-size: 10px;
+    font-weight: bold;
+  }
+}
 

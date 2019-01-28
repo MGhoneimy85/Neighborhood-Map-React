@@ -10,6 +10,7 @@ class Master extends Component {
     this.state = { menuOpen: false , 
                    venues: [] , 
                    filteredVenues: [] ,
+                   selectedPlace: {},
                    isLoading: false,
                    noResults: false,
                    currentLatLng: {
@@ -20,7 +21,7 @@ class Master extends Component {
     this.param = {
       client_id: "1CPFL1RI135SHQNHOTCT2HYAAXV3LK0SHR1RCIBVWOHMLZOF",
       client_secret: "U5G4FEDYVEAHXJH3BSYYGNGPYTK1JKSNQVU3RPWRGHSYN3PV",
-      query: "food",
+      query: "food",  // can be changed to any other category 
       ll: this.state.currentLatLng.lat+','+this.state.currentLatLng.lng,
       v:'20190126'
     }
@@ -28,10 +29,12 @@ class Master extends Component {
     this.apiURL = "https://api.foursquare.com/v2/venues/explore?";
     this.toggleMenu = this.toggleMenu.bind(this);
     this.filterVenues = this.filterVenues.bind(this);
+    this.setSelected = this.setSelected.bind(this);
     
   }
   
   componentDidMount() {
+    //get current location
     this.getGeoLocation();
   }
 
@@ -43,6 +46,7 @@ class Master extends Component {
         this.setState({
           venues: response.data.response.groups[0].items,
           filteredVenues: response.data.response.groups[0].items,
+          selectedPlace: response.data.response.groups[0].items[0].venue,
           isLoading: true
         }, null);
       })
@@ -50,19 +54,27 @@ class Master extends Component {
         console.log("ERROR!! " + error)
       })
   }
-
+  
   toggleMenu() {
+    // open close menu
     this.setState(state => ({
       menuOpen: !state.menuOpen
     }));
-    console.log(this.state)
   }
+
+  // set selected 
+  setSelected(param){
+    this.setState(state => ({
+      menuOpen: !state.menuOpen,
+      selectedPlace:param
+    }));
+  }
+
   /*  get your current location landitude and langtidue to send them to map Wrapper amd to foursquare */
   getGeoLocation = () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             position => {
-                console.log(position.coords);
                 this.setState(prevState => ({
                     currentLatLng: {
                         ...prevState.currentLatLng,
@@ -72,11 +84,15 @@ class Master extends Component {
                 }));
                 this.param.ll = position.coords.latitude+','+position.coords.longitude
                 this.getVenues()
-            });
+            } , alert('please activate location service') );
     } else {
-        console.log('error');
+      //if location service not available set a static location my location in egypt
+        this.param.ll = 30.06+','+30.95;
+        this.getVenues();
     }
   }
+
+
   filterVenues(e){
     this.setState({
       filteredVenues: []
@@ -108,7 +124,7 @@ class Master extends Component {
           <input type="text" onChange={this.filterVenues} placeholder="filter" />
           {this.state.noResults ? <div className="no-results"> No results found </div> : null}
           <div className="side-menu-items">
-              {this.state.filteredVenues.map((item,index) => (<div key={index} className="side-menu-item" >{item.venue.name}</div>))}
+              {this.state.filteredVenues.map((item,index) => (<div key={index} className="side-menu-item" onClick={() => this.setSelected(item.venue)} >{item.venue.name}</div>))}
           </div>
         </div>
         <main className={this.state.menuOpen? 'open' : ''}>
@@ -121,7 +137,7 @@ class Master extends Component {
           <section>
             {
               this.state.isLoading ? 
-              <MapWrapper markers={this.state.filteredVenues} position={this.state.currentLatLng} /> 
+              <MapWrapper markers={this.state.filteredVenues} selected={this.state.selectedPlace} position={this.state.currentLatLng} /> 
               : 
               <div className="loading-div">
                   <div className="text">
@@ -130,7 +146,7 @@ class Master extends Component {
                   <img src={logo} className="App-logo" alt="logo" />
               </div>
             }
-              <img src="http://icons.iconarchive.com/icons/designbolts/vector-foursquare/128/Foursquare-1-icon.png"
+              <img src="https://icons.iconarchive.com/icons/designbolts/vector-foursquare/128/Foursquare-1-icon.png"
 					className="foursquarelogo"
 				 	alt="foursquarelogo"/>
           </section>
