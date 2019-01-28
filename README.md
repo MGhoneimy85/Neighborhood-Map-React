@@ -2,14 +2,46 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 this is graduation project for udacity nanodegree program
 
 this app created using create-react app
-it helps you to find all location of category food near your current loccation
+it helps you to find all location of category food near your current location
 
+you will need to allow location service to get your current location 
+
+using Foursquare API to search for your near food location 
+and when click marker info window apear with rating info about this place 
+
+venue details may be sometimes will not work as it is a premium link from fousquare so may be sometimes qota exceed an alert will apear
 
 [DEMO_LINK] (https://mghoneimy85.github.io/neighborhood-map-react/)
 
+this project is deployed on gh-pages 
 
-this is a project for t
 
+project sctructure
+
+i made 2 components 
+
+
+
+Master component 
+
+and this one is more like actiong like master page 
+header menu and main compoenent in this one  i get current location then i get akk food option near this location
+
+
+MapWrapper  component 
+
+then i pass this to the mapWrapper componnent to render all markers and position of the map
+
+
+
+index.css has all styles 
+
+
+i made loading dimmed screen just to be shown untill response is ready  
+
+## Screenshot for UI of the app
+
+![Image Screenshot](https://github.com/MGhoneimy85/neighborhood-map-react/blob/master/screenshot.png)
 
 ## Available Scripts
 
@@ -38,6 +70,13 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run deploy`
+
+this will run build command to build production version then publish it on gh-pages 
+
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
@@ -53,27 +92,3 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
